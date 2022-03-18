@@ -12,23 +12,24 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// settingCmd represents the setting command
 var settingCmd = &cobra.Command{
 	Use:   "setting",
-	Short: "A brief description of your command",
-	Long:  `Settings`,
+	Short: "Set the setting",
 	Run: func(cmd *cobra.Command, args []string) {
-		if contains(args, "list") {
-			printSettingList()
-		} else {
-			setupSettings()
-		}
+		setupSettings()
+	},
+}
+
+var settingListCmd = &cobra.Command{
+	Use:   "list",
+	Short: "list of setting",
+	Run: func(cmd *cobra.Command, args []string) {
+		printSettingList()
 	},
 }
 
 func init() {
-	settingCmd.Flags().BoolP("list", "l", false, "list of setting")
-
+	settingCmd.AddCommand(settingListCmd)
 	rootCmd.AddCommand(settingCmd)
 }
 
@@ -41,10 +42,11 @@ func printSettingList() {
 
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
+	t.SetTitle("List of Settings")
 	t.AppendHeader(table.Row{"Key", "Value"})
 	t.AppendRows(rows)
 	t.AppendSeparator()
-	t.AppendFooter(table.Row{"", ""})
+	t.SetCaption("Total: %d", len(rows))
 	t.Render()
 }
 
@@ -81,6 +83,13 @@ func setupSettings() {
 	)
 
 	viper.Set("mode", mode)
+
+	search := promptGetSelect(
+		"Please, select a search mode",
+		[]string{"Single", "Always"},
+	)
+
+	viper.Set("search", search)
 
 	_ = viper.WriteConfig()
 }

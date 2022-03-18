@@ -54,18 +54,23 @@ func FetchFromTureng(query string) (Phrases, error) {
 
 	source := doc.Find("#englishResultsTable").Find("tbody tr")
 
+	// We must set this variable when we reach the first header information
+	var isHeader bool
+
 	source.Each(func(i int, str *goquery.Selection) {
 		var phrase Phrase
 
 		tableHeaders := str.Find("th")
 		tableColumns := str.Find("td")
 
-		if tableHeaders.Eq(2).Text() != "" {
+		if tableHeaders.Eq(2).Text() != "" && !isHeader {
 			phrase.Category = tableHeaders.Eq(1).Text()
 			phrase.Source = tableHeaders.Eq(2).Text()
 			phrase.Target = tableHeaders.Eq(3).Text()
 			phrase.Type = control(viper.GetString("mode") == "Turkish - English", "Tür", "Type")
 			phrases = append(phrases, phrase)
+
+			isHeader = true
 		} else {
 
 			secondColumnTypeText := tableColumns.Eq(2).Find("i").Text()
@@ -116,6 +121,8 @@ func convertType(phraseType string) string {
 		return "ünlem"
 	case "interj.":
 		return "interjection"
+	case "expr.":
+		return "expression"
 	default:
 		return "unknown"
 	}

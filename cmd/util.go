@@ -1,13 +1,6 @@
 package cmd
 
-func contains(elems []string, v string) bool {
-	for _, s := range elems {
-		if v == s {
-			return true
-		}
-	}
-	return false
-}
+const version = "v0.0.1"
 
 func control(exp bool, truthValue, falsyValue string) string {
 	if exp {
