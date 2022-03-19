@@ -30,3 +30,9 @@ ll setting
 ```shell
 ll setting list
 ```
+
+### Install
+
+```shell
+curl -s https://raw.githubusercontent.com/burkaydurdu/ll/master/install.sh | bash
+```
