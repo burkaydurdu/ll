@@ -33,6 +33,15 @@ ll setting list
 
 ### Install
 
+Just for macOS
 ```shell
 curl -s https://raw.githubusercontent.com/burkaydurdu/ll/master/install.sh | bash
+```
+Note: You should use ``tureng`` key.
+```shell
+tureng help
+```
+It starts searching when you run this command.
+```shell
+tureng
 ```
